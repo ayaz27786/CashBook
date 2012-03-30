@@ -25,7 +25,7 @@ public class CashBookActivity extends Activity {
 		tag.setTag("Education");
 		tags.add(tag);
 		tag = new Tag();
-		tag.setTag("Grocery");
+		tag.setTag("Yippeee");
 		tags.add(tag);
 		Entry entry = new Entry();
 		entry.setAmount("1000");

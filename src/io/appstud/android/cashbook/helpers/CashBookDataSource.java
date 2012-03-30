@@ -59,7 +59,7 @@ public class CashBookDataSource {
 		}
 		return tags;
 	}
-	
+
 	private long createEHT(long entryId, long tagId) {
 		ContentValues values = new ContentValues();
 		values.put(CashBookSQLiteOpenHelper.COL_ENTRY_ID, entryId);
@@ -67,9 +67,21 @@ public class CashBookDataSource {
 		long ehtId = database
 				.insert(CashBookSQLiteOpenHelper.TABLE_NAME_ENTRY_HAS_TAG,
 						null, values);
-		Log.d(TAG, "Row inserted in EntryHasTags table : " + ehtId + " - " + entryId + " - "
-				+ tagId);
+		Log.d(TAG, "Row inserted in EntryHasTags table : " + ehtId + " - "
+				+ entryId + " - " + tagId);
 		return ehtId;
+	}
+
+	private long findTagIdByTag(String tag) {
+		Cursor cursor = database.query(
+				CashBookSQLiteOpenHelper.TABLE_NAME_TAGS, null,
+				CashBookSQLiteOpenHelper.COL_TAG + " = " + "?",
+				new String[] { String.valueOf(tag) }, null, null, null);
+		cursor.moveToFirst();
+		Tag t = cursorToTag(cursor);
+		long tagId = t.getId();
+		Log.d(TAG, "Tag found : " + t.getId() + " - " + t.getTag());
+		return tagId;
 	}
 
 	public long createEntry(Entry entry) {
@@ -80,14 +92,16 @@ public class CashBookDataSource {
 		values.put(CashBookSQLiteOpenHelper.COL_FLAG, entry.getFlag());
 
 		if (entry.getTags() != null) {
-			long entry_id = database.insert(
+			long entryId = database.insert(
 					CashBookSQLiteOpenHelper.TABLE_NAME_ENTRIES, null, values);
-			Log.d(TAG, "Entry Created with id :" + String.valueOf(entry_id));
+			Log.d(TAG, "Entry Created with id : " + String.valueOf(entryId));
 			for (Tag tag : entry.getTags()) {
 				long tagId = createTag(tag.getTag());
 				if (tagId < 1) {
 					Log.d(TAG, "Tags which already exists : " + tag.getTag());
+					tagId = findTagIdByTag(tag.getTag());
 				}
+				createEHT(entryId, tagId);
 			}
 			return entry.getId();
 		} else
