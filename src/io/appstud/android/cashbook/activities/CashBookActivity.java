@@ -22,18 +22,19 @@ public class CashBookActivity extends Activity {
 		cashBookDataSource.open();
 		List<Tag> tags = new ArrayList<Tag>(); 
 		Tag tag = new Tag();
-		tag.setTag("Education");
+		tag.setTag("Grocery");
 		tags.add(tag);
 		tag = new Tag();
-		tag.setTag("Yippeee");
+		tag.setTag("Rent");
 		tags.add(tag);
 		Entry entry = new Entry();
-		entry.setAmount("1000");
+		entry.setAmount("600");
 		entry.setDate("11/2012/2");
 		entry.setDesciption("Hello Expense");
 		entry.setFlag("Credit");
 		entry.setTags(tags);
 		cashBookDataSource.createEntry(entry);
+		cashBookDataSource.getAllEntries();
 		cashBookDataSource.close();
 	}
 }

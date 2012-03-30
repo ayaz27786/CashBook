@@ -73,6 +73,7 @@ public class CashBookDataSource {
 	}
 
 	private long findTagIdByTag(String tag) {
+		// String.valueOf(tag) is mandatory
 		Cursor cursor = database.query(
 				CashBookSQLiteOpenHelper.TABLE_NAME_TAGS, null,
 				CashBookSQLiteOpenHelper.COL_TAG + " = " + "?",
@@ -80,8 +81,39 @@ public class CashBookDataSource {
 		cursor.moveToFirst();
 		Tag t = cursorToTag(cursor);
 		long tagId = t.getId();
-		Log.d(TAG, "Tag found : " + t.getId() + " - " + t.getTag());
 		return tagId;
+	}
+
+	private String findTagByTagId(long tagId) {
+		// String.valueOf(tag) is mandatory
+		Cursor cursor = database.query(
+				CashBookSQLiteOpenHelper.TABLE_NAME_TAGS, null,
+				CashBookSQLiteOpenHelper.COL_ID + " = " + "?",
+				new String[] { String.valueOf(tagId) }, null, null, null);
+		cursor.moveToFirst();
+		Tag t = cursorToTag(cursor);
+		String tag = t.getTag();
+		Log.d(TAG, "Tag : " + t.getId() + " - " + t.getTag());
+		return tag;
+	}
+
+	private List<Tag> findTagsByEntryId(long entryId) {
+		List<Tag> tags = new ArrayList<Tag>();
+		Cursor cursor = database.query(
+				CashBookSQLiteOpenHelper.TABLE_NAME_ENTRY_HAS_TAG, null,
+				CashBookSQLiteOpenHelper.COL_ENTRY_ID + " = " + "?",
+				new String[] { String.valueOf(entryId) }, null, null, null);
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			long tagId = cursor.getLong(2);
+			String tag = findTagByTagId(tagId);
+			Tag t = new Tag();
+			t.setId(tagId);
+			t.setTag(tag);
+			tags.add(t);
+			cursor.moveToNext();
+		}
+		return tags;
 	}
 
 	public long createEntry(Entry entry) {
@@ -108,11 +140,40 @@ public class CashBookDataSource {
 			return -1;
 	}
 
+	public List<Entry> getAllEntries() {
+		List<Entry> entries = new ArrayList<Entry>();
+		Cursor cursor = database.query(
+				CashBookSQLiteOpenHelper.TABLE_NAME_ENTRIES, null, null, null,
+				null, null, null);
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			Entry entry = cursorToEntry(cursor);
+			Log.d(TAG,
+					"Entry Found : " + entry.getId() + " - "
+							+ entry.getAmount());
+			List<Tag> tags = new ArrayList<Tag>();
+			tags = findTagsByEntryId(entry.getId());
+			entry.setTags(tags);
+			entries.add(entry);
+			cursor.moveToNext();
+		}
+		return entries;
+	}
+
 	private Tag cursorToTag(Cursor cursor) {
 		Tag tag = new Tag();
 		tag.setId(cursor.getLong(0));
 		tag.setTag(cursor.getString(1));
-		Log.d(TAG, tag.toString());
 		return tag;
+	}
+
+	private Entry cursorToEntry(Cursor cursor) {
+		Entry entry = new Entry();
+		entry.setId(cursor.getLong(0));
+		entry.setAmount(cursor.getString(1));
+		entry.setFlag(cursor.getString(2));
+		entry.setDate(cursor.getString(3));
+		entry.setDesciption(cursor.getString(4));
+		return entry;
 	}
 }
