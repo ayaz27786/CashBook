@@ -160,6 +160,45 @@ public class CashBookDataSource {
 		return entries;
 	}
 
+	public Entry getEntryById(long entryId) {
+
+		Cursor cursor = database.query(
+				CashBookSQLiteOpenHelper.TABLE_NAME_ENTRIES, null,
+				CashBookSQLiteOpenHelper.COL_ID + " = ? ",
+				new String[] { String.valueOf(entryId) }, null, null, null);
+		cursor.moveToFirst();
+		Entry entry = cursorToEntry(cursor);
+		List<Tag> tags = new ArrayList<Tag>();
+		tags = findTagsByEntryId(entryId);
+		entry.setTags(tags);
+		return entry;
+	}
+
+	public Tag updateTag(long tagId, Tag tag) {
+		ContentValues values = new ContentValues();
+		values.put(CashBookSQLiteOpenHelper.COL_TAG, tag.getTag());
+		database.update(CashBookSQLiteOpenHelper.TABLE_NAME_TAGS, values,
+				CashBookSQLiteOpenHelper.COL_ID + " = ?",
+				new String[] { String.valueOf(tagId) });
+		tag.setTag(findTagByTagId(tagId));
+		return tag;
+	}
+
+	public void deleteEntry(long entryId) {
+		database.delete(CashBookSQLiteOpenHelper.TABLE_NAME_ENTRIES,
+				CashBookSQLiteOpenHelper.COL_ID + " = ?",
+				new String[] { String.valueOf(entryId) });
+		database.delete(CashBookSQLiteOpenHelper.TABLE_NAME_ENTRY_HAS_TAG,
+				CashBookSQLiteOpenHelper.COL_ENTRY_ID + " = ?",
+				new String[] { String.valueOf(entryId) });
+	}
+
+	public long updateEntry(long entryId, Entry entry) {
+		deleteEntry(entryId);
+		long updatedEntryId = createEntry(entry);
+		return updatedEntryId;
+	}
+
 	private Tag cursorToTag(Cursor cursor) {
 		Tag tag = new Tag();
 		tag.setId(cursor.getLong(0));
