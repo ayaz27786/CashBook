@@ -3,5 +3,10 @@
 
     <string name="hello">Hello World, CashBookActivity!</string>
     <string name="app_name">CashBook</string>
+    <string name="cashbook_is_empty">CashBook is Empty</string>
+    <string name="add">Add</string>
+    <string name="add_entry">Add Entry</string>
+    <string name="credit">Credit</string>
+    <string name="debit">Debit</string>
 
 </resources>

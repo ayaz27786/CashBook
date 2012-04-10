@@ -10,7 +10,7 @@ public class CashBookSQLiteOpenHelper extends SQLiteOpenHelper {
 	private static final String TAG = "CashBookSQLiteOpenHelper";
 
 	// IVARS
-	private static final int DB_VERSION = 3;
+	private static final int DB_VERSION = 4;
 	private static final String DB_NAME = "cashbook.db";
 
 	public static final String TABLE_NAME_ENTRIES = "entries";
@@ -35,7 +35,7 @@ public class CashBookSQLiteOpenHelper extends SQLiteOpenHelper {
 		String CREATE_TABLE_ENTRIES = "CREATE TABLE " + TABLE_NAME_ENTRIES
 				+ "( " + COL_ID + " integer primary key autoincrement, "
 				+ COL_AMT + " text not null, " + COL_FLAG + " text not null, "
-				+ COL_DATE + " text not null, " + COL_DESC + " text );";
+				+ COL_DATE + " long not null, " + COL_DESC + " text );";
 		db.execSQL(CREATE_TABLE_ENTRIES);
 		Log.d(TAG, "Table Created : " + TABLE_NAME_ENTRIES);
 

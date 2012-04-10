@@ -211,7 +211,7 @@ public class CashBookDataSource {
 		entry.setId(cursor.getLong(0));
 		entry.setAmount(cursor.getString(1));
 		entry.setFlag(cursor.getString(2));
-		entry.setDate(cursor.getString(3));
+		entry.setDate(cursor.getColumnIndex(CashBookSQLiteOpenHelper.COL_DATE));
 		entry.setDesciption(cursor.getString(4));
 		return entry;
 	}

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp" >
+
+    <EditText
+        android:id="@+id/addAmountET"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="4dp"
+        android:gravity="right"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/addDate"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="4dp"
+        android:inputType="date"
+        android:padding="4dp" />
+
+    <ToggleButton
+        android:id="@+id/toggleCredit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="4dp"
+        android:checked="true"
+        android:padding="4dp"
+        android:textOff="@string/debit"
+        android:textOn="@string/credit" />
+
+</LinearLayout>
