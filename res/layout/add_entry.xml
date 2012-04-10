@@ -19,8 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_margin="4dp"
-        android:inputType="date"
-        android:padding="4dp" />
+        android:inputType="date" />
 
     <ToggleButton
         android:id="@+id/toggleCredit"
@@ -29,7 +28,6 @@
         android:layout_gravity="center_horizontal"
         android:layout_margin="4dp"
         android:checked="true"
-        android:padding="4dp"
         android:textOff="@string/debit"
         android:textOn="@string/credit" />
 
