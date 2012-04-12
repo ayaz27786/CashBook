@@ -30,7 +30,7 @@ public class CashBookDataSource {
 		cashBookSQLiteOpenHelper.close();
 	}
 
-	private long createTag(String tag) {
+	public long createTag(String tag) {
 		ContentValues values = new ContentValues();
 		values.put(CashBookSQLiteOpenHelper.COL_TAG, tag);
 		long tagId = 0;
@@ -211,7 +211,7 @@ public class CashBookDataSource {
 		entry.setId(cursor.getLong(0));
 		entry.setAmount(cursor.getString(1));
 		entry.setFlag(cursor.getString(2));
-		entry.setDate(cursor.getColumnIndex(CashBookSQLiteOpenHelper.COL_DATE));
+		entry.setDate(cursor.getString(3));
 		entry.setDesciption(cursor.getString(4));
 		return entry;
 	}

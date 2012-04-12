@@ -8,5 +8,6 @@
     <string name="add_entry">Add Entry</string>
     <string name="credit">Credit</string>
     <string name="debit">Debit</string>
+    <string name="save">Save</string>
 
 </resources>

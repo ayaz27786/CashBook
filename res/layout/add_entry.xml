@@ -11,8 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_margin="4dp"
+        android:ems="10"
         android:gravity="right"
-        android:inputType="number" />
+        android:inputType="number" >
+
+        <requestFocus />
+    </EditText>
 
     <EditText
         android:id="@+id/addDate"
@@ -20,6 +24,14 @@
         android:layout_height="48dp"
         android:layout_margin="4dp"
         android:inputType="date" />
+
+    <EditText
+        android:id="@+id/desciptionEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:inputType="textMultiLine"
+        android:minHeight="48dp" />
 
     <ToggleButton
         android:id="@+id/toggleCredit"
@@ -30,5 +42,11 @@
         android:checked="true"
         android:textOff="@string/debit"
         android:textOn="@string/credit" />
+
+    <LinearLayout
+        android:id="@+id/tagsLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp" />
 
 </LinearLayout>

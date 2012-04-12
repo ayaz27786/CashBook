@@ -49,6 +49,14 @@ public class EntryAdapter extends ArrayAdapter<Entry> {
 		holder.date.setText(String.valueOf(entry.getDate()));
 		holder.total.setText(entry.getAmount());
 
+		if (entry.getFlag().equals(
+				context.getResources().getString(R.string.credit))) {
+			holder.total.setTextColor(context.getResources().getColor(
+					R.color.light_green));
+		} else
+			holder.total.setTextColor(context.getResources().getColor(
+					R.color.light_red));
+
 		return row;
 	}
 

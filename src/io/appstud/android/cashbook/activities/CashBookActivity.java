@@ -23,6 +23,7 @@ public class CashBookActivity extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.cashbook_date);
 
