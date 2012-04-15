@@ -15,6 +15,7 @@ import java.util.List;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,6 +37,7 @@ public class AddEntryActivity extends Activity {
 	List<Tag> tags = new ArrayList<Tag>();
 	Entry entry = new Entry();
 	static final int DATE_DIALOG_ID = 0;
+	static final int ADD_TAG_DIALOG_ID = 1;
 
 	int mYear;
 	int mDay;
@@ -53,10 +55,22 @@ public class AddEntryActivity extends Activity {
 		setupTagSelector();
 	}
 
+	private Dialog setupAddTagDialog() {
+		final Dialog addTagDialog = new Dialog(this);
+
+		addTagDialog.setContentView(R.layout.add_tag_dialog);
+		addTagDialog.setTitle(R.string.create_new_tag);
+		addTagDialog.setCancelable(true);
+
+		return addTagDialog;
+
+	}
+
 	private void setupTagSelector() {
 		LinearLayout tagsLinearLayout = (LinearLayout) findViewById(R.id.tagsLinearLayout);
 		ToggleButton toggleButton;
 		List<Tag> tags = new ArrayList<Tag>();
+
 		cashBookDataSource.open();
 		tags = cashBookDataSource.getTags();
 		cashBookDataSource.close();
@@ -69,6 +83,12 @@ public class AddEntryActivity extends Activity {
 			tagsLinearLayout.addView(toggleButton);
 		}
 
+	}
+
+	public void showAddTadDialog(View view) {
+		DialogFragment addTagDialog = AddTagDialogFragment.newInstance();
+		addTagDialog.show(getFragmentManager(),
+				getResources().getString(R.string.create_new_tag));
 	}
 
 	private List<Tag> getSelectedTags(LinearLayout tagsLinearLayout) {
@@ -128,12 +148,20 @@ public class AddEntryActivity extends Activity {
 
 	@Override
 	protected Dialog onCreateDialog(int id) {
+		Dialog dialog;
 		switch (id) {
 		case DATE_DIALOG_ID:
-			return new DatePickerDialog(this, mDateSetListener, mYear, mMonth,
-					mDay);
+			dialog = new DatePickerDialog(this, mDateSetListener, mYear,
+					mMonth, mDay);
+			break;
+		case ADD_TAG_DIALOG_ID:
+			dialog = setupAddTagDialog();
+			break;
+		default:
+			dialog = null;
 		}
-		return null;
+
+		return dialog;
 	}
 
 	@Override

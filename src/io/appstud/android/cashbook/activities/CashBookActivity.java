@@ -23,7 +23,6 @@ public class CashBookActivity extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
-		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.cashbook_date);
 
@@ -56,11 +55,6 @@ public class CashBookActivity extends ListActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intent = new Intent();
 		switch (item.getItemId()) {
-		case android.R.id.home:
-			intent = new Intent(this, CashBookActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
-			return true;
 		case R.id.menuAdd:
 			intent = new Intent(this, AddEntryActivity.class);
 			startActivity(intent);

@@ -43,6 +43,14 @@
         android:inputType="textMultiLine"
         android:minHeight="48dp" />
 
+    <Button
+        android:id="@+id/addTagButton"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="4dp"
+        android:onClick="showAddTadDialog"
+        android:text="@string/create_new_tag" />
+
     <LinearLayout
         android:id="@+id/tagsLinearLayout"
         android:layout_width="match_parent"

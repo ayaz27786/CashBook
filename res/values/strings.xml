@@ -11,5 +11,7 @@
     <string name="save">Save</string>
     <string name="description">Description</string>
     <string name="please_enter_an_amount">Please enter an amount.</string>
+    <string name="new_tag">New Tag</string>
+    <string name="create_new_tag">Add New Tag</string>
 
 </resources>
