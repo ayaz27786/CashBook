@@ -6,7 +6,7 @@ public class Entry {
 
 	private long id;
 	private String amount;
-	private String date;
+	private long date;
 	private String flag;
 	private String desciption;
 	private List<Tag> tags;
@@ -27,11 +27,11 @@ public class Entry {
 		this.amount = amount;
 	}
 
-	public String getDate() {
+	public long getDate() {
 		return date;
 	}
 
-	public void setDate(String date) {
+	public void setDate(long date) {
 		this.date = date;
 	}
 

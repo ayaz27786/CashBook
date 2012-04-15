@@ -9,5 +9,7 @@
     <string name="credit">Credit</string>
     <string name="debit">Debit</string>
     <string name="save">Save</string>
+    <string name="description">Description</string>
+    <string name="please_enter_an_amount">Please enter an amount.</string>
 
 </resources>

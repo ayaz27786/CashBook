@@ -18,20 +18,11 @@
         <requestFocus />
     </EditText>
 
-    <EditText
+    <Button
         android:id="@+id/addDate"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_margin="4dp"
-        android:inputType="date" />
-
-    <EditText
-        android:id="@+id/desciptionEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:inputType="textMultiLine"
-        android:minHeight="48dp" />
+        android:layout_margin="4dp" />
 
     <ToggleButton
         android:id="@+id/toggleCredit"
@@ -42,6 +33,15 @@
         android:checked="true"
         android:textOff="@string/debit"
         android:textOn="@string/credit" />
+
+    <EditText
+        android:id="@+id/desciptionEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:hint="@string/description"
+        android:inputType="textMultiLine"
+        android:minHeight="48dp" />
 
     <LinearLayout
         android:id="@+id/tagsLinearLayout"

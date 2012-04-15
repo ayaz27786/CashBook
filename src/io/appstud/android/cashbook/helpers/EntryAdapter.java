@@ -2,6 +2,7 @@ package io.appstud.android.cashbook.helpers;
 
 import io.appstud.android.cashbook.R;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class EntryAdapter extends ArrayAdapter<Entry> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View row = convertView;
 		EntryHolder holder = null;
+		String dateFormatted;
 
 		if (row == null) {
 			LayoutInflater layoutInflater = (LayoutInflater) getContext()
@@ -46,7 +48,10 @@ public class EntryAdapter extends ArrayAdapter<Entry> {
 		}
 
 		Entry entry = entries.get(position);
-		holder.date.setText(String.valueOf(entry.getDate()));
+		dateFormatted = DateFormat.getDateInstance(DateFormat.MEDIUM).format(
+				entry.getDate());
+
+		holder.date.setText(dateFormatted);
 		holder.total.setText(entry.getAmount());
 
 		if (entry.getFlag().equals(
