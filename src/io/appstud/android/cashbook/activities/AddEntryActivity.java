@@ -55,14 +55,11 @@ public class AddEntryActivity extends Activity {
 		setupTagSelector();
 	}
 
-	private Dialog setupAddTagDialog() {
-		final Dialog addTagDialog = new Dialog(this);
+	public void showAddTagDialog(View v) {
 
-		addTagDialog.setContentView(R.layout.add_tag_dialog);
-		addTagDialog.setTitle(R.string.create_new_tag);
-		addTagDialog.setCancelable(true);
-
-		return addTagDialog;
+		DialogFragment addTagDialog = AddTagDialogFragment.newInstance();
+		addTagDialog.show(getFragmentManager(),
+				getResources().getString(R.string.create_new_tag));
 
 	}
 
@@ -83,12 +80,6 @@ public class AddEntryActivity extends Activity {
 			tagsLinearLayout.addView(toggleButton);
 		}
 
-	}
-
-	public void showAddTadDialog(View view) {
-		DialogFragment addTagDialog = AddTagDialogFragment.newInstance();
-		addTagDialog.show(getFragmentManager(),
-				getResources().getString(R.string.create_new_tag));
 	}
 
 	private List<Tag> getSelectedTags(LinearLayout tagsLinearLayout) {
@@ -153,9 +144,6 @@ public class AddEntryActivity extends Activity {
 		case DATE_DIALOG_ID:
 			dialog = new DatePickerDialog(this, mDateSetListener, mYear,
 					mMonth, mDay);
-			break;
-		case ADD_TAG_DIALOG_ID:
-			dialog = setupAddTagDialog();
 			break;
 		default:
 			dialog = null;

@@ -1,7 +1,11 @@
 package io.appstud.android.cashbook.activities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.appstud.android.cashbook.R;
 import io.appstud.android.cashbook.helpers.CashBookDataSource;
+import io.appstud.android.cashbook.helpers.Tag;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -10,6 +14,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ToggleButton;
 
 public class AddTagDialogFragment extends DialogFragment {
 
@@ -35,7 +41,7 @@ public class AddTagDialogFragment extends DialogFragment {
 		LayoutInflater inflater = LayoutInflater.from(getActivity());
 		final View v = inflater.inflate(R.layout.add_tag_dialog, null);
 		AlertDialog dialog = new AlertDialog.Builder(getActivity())
-				.setTitle(title).setView(v).setCancelable(true)
+				.setTitle(title).setView(v).setCancelable(false)
 				.setNegativeButton(cancel, null)
 				.setNeutralButton(add, new DialogInterface.OnClickListener() {
 
@@ -55,7 +61,24 @@ public class AddTagDialogFragment extends DialogFragment {
 							cashBookDataSource.open();
 							cashBookDataSource.createTag(addTagEditText
 									.getText().toString());
+
+							LinearLayout tagsLinearLayout = (LinearLayout) getActivity()
+									.findViewById(R.id.tagsLinearLayout);
+							tagsLinearLayout.removeAllViews();
+							ToggleButton toggleButton;
+							List<Tag> tags = new ArrayList<Tag>();
+
+							tags = cashBookDataSource.getTags();
 							cashBookDataSource.close();
+
+							for (Tag tag : tags) {
+								toggleButton = new ToggleButton(getActivity());
+								toggleButton.setText(tag.getTag());
+								toggleButton.setTextOn(tag.getTag());
+								toggleButton.setTextOff(tag.getTag());
+								tagsLinearLayout.addView(toggleButton);
+							}
+
 							dialog.dismiss();
 						}
 
