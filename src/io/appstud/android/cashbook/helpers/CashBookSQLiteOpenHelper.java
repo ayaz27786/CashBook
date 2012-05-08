@@ -10,7 +10,7 @@ public class CashBookSQLiteOpenHelper extends SQLiteOpenHelper {
 	private static final String TAG = "CashBookSQLiteOpenHelper";
 
 	// IVARS
-	private static final int DB_VERSION = 4;
+	private static final int DB_VERSION = 5;
 	private static final String DB_NAME = "cashbook.db";
 
 	public static final String TABLE_NAME_ENTRIES = "entries";

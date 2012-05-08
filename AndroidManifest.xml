@@ -4,12 +4,15 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-sdk android:minSdkVersion="11" />
+    <uses-sdk android:minSdkVersion="15" />
 
     <application
         android:name="CashBook"
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name" >
+        android:icon="@drawable/home"
+        android:label="@string/app_name"
+         android:uiOptions="none"
+            
+ >
         <activity
             android:name=".activities.CashBookActivity"
             android:label="@string/app_name" >
@@ -21,8 +24,12 @@
         </activity>
         <activity
             android:name=".activities.AddEntryActivity"
-            android:label="@string/add_entry" >
+            android:label=" " >
         </activity>
+        <activity android:name=".activities.DetailActivity"></activity>
+        <activity android:name=".activities.TagInfo"></activity>
+        <activity android:name=".activities.CustomDate"></activity>
+        <activity android:name=".activities.UpdateTagSubList"></activity>
     </application>
 
 </manifest>

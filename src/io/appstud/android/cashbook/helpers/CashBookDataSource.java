@@ -1,6 +1,13 @@
 package io.appstud.android.cashbook.helpers;
 
+import io.appstud.android.cashbook.activities.CashBookActivity;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -12,11 +19,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 public class CashBookDataSource {
-
+   
 	private static final String TAG = "CashBookDataSource";
-
+	DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+	java.util.Date lastDate;
+	
 	private SQLiteDatabase database;
 	private CashBookSQLiteOpenHelper cashBookSQLiteOpenHelper;
+	
 
 	public CashBookDataSource(Context context) {
 		cashBookSQLiteOpenHelper = new CashBookSQLiteOpenHelper(context);
@@ -139,18 +149,18 @@ public class CashBookDataSource {
 		} else
 			return -1;
 	}
-
-	public List<Entry> getAllEntries() {
-		List<Entry> entries = new ArrayList<Entry>();
-		Cursor cursor = database.query(
-				CashBookSQLiteOpenHelper.TABLE_NAME_ENTRIES, null, null, null,
-				null, null, null);
+	public List<Entry> getAllEntriesByDate(long dateSelected) {
+				Cursor cursor = database.query(
+				CashBookSQLiteOpenHelper.TABLE_NAME_ENTRIES, null,
+				CashBookSQLiteOpenHelper.COL_DATE + " = ? ",
+				new String[] { String.valueOf(dateSelected) }, null, null, null);
+		ArrayList<Entry>entries=new ArrayList<Entry>();
+		entries.clear();
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			Entry entry = cursorToEntry(cursor);
-			Log.d(TAG,
-					"Entry Found : " + entry.getId() + " - "
-							+ entry.getAmount());
+			Log.d(TAG,"No of Entry");
+					
 			List<Tag> tags = new ArrayList<Tag>();
 			tags = findTagsByEntryId(entry.getId());
 			entry.setTags(tags);
@@ -159,7 +169,52 @@ public class CashBookDataSource {
 		}
 		return entries;
 	}
+	
+	public List<Entry> findEntriesByTagId(long tagId) {
+		//List<Tag> tags = new ArrayList<Tag>();
+		List<Entry> entries = new ArrayList<Entry>();
+		Cursor cursor = database.query(
+				CashBookSQLiteOpenHelper.TABLE_NAME_ENTRY_HAS_TAG, null,
+				CashBookSQLiteOpenHelper.COL_TAG_ID + " = " + "?",
+				new String[] { String.valueOf(tagId) }, null, null, null);
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			long entryId = cursor.getLong(1);
+			Entry entry = findEntryByEntryId(entryId);
+			Log.d(TAG, entry.getAmount()+"    "+entry.getDate()+"    "+entry.getFlag());
+		    entries.add(entry);
+			cursor.moveToNext();
+		}
+		return entries;
+	}
 
+	
+	private Entry findEntryByEntryId(long entryId) {
+		// String.valueOf(tag) is mandatory
+		Cursor cursor = database.query(
+				CashBookSQLiteOpenHelper.TABLE_NAME_ENTRIES, null,
+				CashBookSQLiteOpenHelper.COL_ID + " = " + "?",
+				new String[] { String.valueOf(entryId) }, null, null, null);
+		cursor.moveToFirst();
+		//Tag t = cursorToTag(cursor);
+		Entry entry = cursorToEntry(cursor);
+		
+		cursor.moveToNext();
+		return entry;
+	}
+
+public float findTotalByEntryId(long id) {
+	String sql = "select amount  from entries where _id=id";
+	Cursor cursor = database.rawQuery(sql, null);
+	
+     cursor.moveToFirst();
+	
+	Float amt=Float.parseFloat(cursor.getString(0));
+	
+		return amt;
+	}
+
+	
 	public Entry getEntryById(long entryId) {
 
 		Cursor cursor = database.query(
@@ -173,6 +228,9 @@ public class CashBookDataSource {
 		entry.setTags(tags);
 		return entry;
 	}
+
+	
+
 
 	public Tag updateTag(long tagId, Tag tag) {
 		ContentValues values = new ContentValues();
@@ -192,7 +250,7 @@ public class CashBookDataSource {
 				CashBookSQLiteOpenHelper.COL_ENTRY_ID + " = ?",
 				new String[] { String.valueOf(entryId) });
 	}
-
+	
 	public long updateEntry(long entryId, Entry entry) {
 		deleteEntry(entryId);
 		long updatedEntryId = createEntry(entry);
@@ -215,4 +273,60 @@ public class CashBookDataSource {
 		entry.setDesciption(cursor.getString(4));
 		return entry;
 	}
+
+	public List<Entry> dateEntry(Date fromDateStr, Date toDateStr) throws ParseException {
+		
+	
+		
+		String sql = "select _id,sum(amount),flag,date,description from entries group by date";
+		Cursor cursor = database.rawQuery(sql, null);
+
+		List<Entry> entryList = new ArrayList<Entry>();
+
+		
+	
+		Log.d(TAG, "No of Dates : " + String.valueOf(cursor.getCount()));
+
+		cursor.moveToFirst();
+		entryList.clear();
+		while (!cursor.isAfterLast()) {		
+		java.util.Date cdate = new Date(cursor.getLong(3)) ;
+		Log.d("date = ",""+cdate);
+			if (((cdate.after(fromDateStr)) || (cdate.equals(fromDateStr)))
+					&& ((cdate.before(toDateStr))) || (cdate.equals(toDateStr))) {
+				Entry entry = new Entry();
+				entry.setAmount(cursor.getString(0));
+				entry.setDate(cursor.getLong(1));
+				entry = cursorToEntry(cursor);
+				List<Tag> tags = new ArrayList<Tag>();
+				tags = findTagsByEntryId(entry.getId());
+				entry.setTags(tags);
+			
+				entryList.add(entry);  
+		}
+
+			
+
+			
+			cursor.moveToNext();
+		}
+		
+		return entryList;
+	}
+
+	public long minDate() {
+	
+		String sql="select min(date) from entries";
+		Cursor cursor=database.rawQuery(sql,null);
+cursor.moveToFirst();
+return cursor.getLong(0);	
+
+	}
+
+	
+
+	
+	
+
+	
 }

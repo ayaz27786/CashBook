@@ -51,10 +51,14 @@
         android:onClick="showAddTagDialog"
         android:text="@string/create_new_tag" />
 
-    <LinearLayout
+    <GridLayout
         android:id="@+id/tagsLinearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp" />
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_margin="4dp"
+        android:orientation="vertical"
+        android:rowCount="2"
+        android:rowOrderPreserved="true"
+         />
 
 </LinearLayout>

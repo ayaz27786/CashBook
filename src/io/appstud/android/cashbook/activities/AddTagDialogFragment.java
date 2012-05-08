@@ -14,7 +14,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.GridLayout;
 import android.widget.ToggleButton;
 
 public class AddTagDialogFragment extends DialogFragment {
@@ -45,7 +45,6 @@ public class AddTagDialogFragment extends DialogFragment {
 				.setNegativeButton(cancel, null)
 				.setNeutralButton(add, new DialogInterface.OnClickListener() {
 
-					@Override
 					public void onClick(DialogInterface dialog, int which) {
 
 						EditText addTagEditText = (EditText) ((Dialog) dialog)
@@ -62,7 +61,7 @@ public class AddTagDialogFragment extends DialogFragment {
 							cashBookDataSource.createTag(addTagEditText
 									.getText().toString());
 
-							LinearLayout tagsLinearLayout = (LinearLayout) getActivity()
+							GridLayout tagsLinearLayout = (GridLayout) getActivity()
 									.findViewById(R.id.tagsLinearLayout);
 							tagsLinearLayout.removeAllViews();
 							ToggleButton toggleButton;

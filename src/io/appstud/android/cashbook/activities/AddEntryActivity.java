@@ -11,14 +11,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,10 +28,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.GridLayout;
 import android.widget.ToggleButton;
 
 public class AddEntryActivity extends Activity {
+	
+
+	
+	Context context;
+	AttributeSet attributeSet;
+
+
 
 	private static final String TAG = "AddEntryActivity";
 
@@ -45,11 +54,20 @@ public class AddEntryActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Log.d(TAG, "oncreate is called");
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.add_entry);
 		setupViews();
+		
 	}
 
+    public View onCreateView(View parent) {
+    	Log.d(TAG, "oncreateView is called");
+		return super.onCreateView(parent, null, context, attributeSet);
+	}
+
+	
 	private void setupViews() {
 		setupDatePicker();
 		setupTagSelector();
@@ -64,7 +82,7 @@ public class AddEntryActivity extends Activity {
 	}
 
 	private void setupTagSelector() {
-		LinearLayout tagsLinearLayout = (LinearLayout) findViewById(R.id.tagsLinearLayout);
+		GridLayout tagsLinearLayout = (GridLayout) findViewById(R.id.tagsLinearLayout);
 		ToggleButton toggleButton;
 		List<Tag> tags = new ArrayList<Tag>();
 
@@ -78,13 +96,19 @@ public class AddEntryActivity extends Activity {
 			toggleButton.setTextOn(tag.getTag());
 			toggleButton.setTextOff(tag.getTag());
 			tagsLinearLayout.addView(toggleButton);
+			Display display = getWindowManager().getDefaultDisplay(); 
+			int width = display.getWidth();  
+			int buttonWidth=toggleButton.getWidth();
+			
+			Log.d(TAG, ""+width+"   Button Width:"+buttonWidth);
+
 		}
 
 	}
 
-	private List<Tag> getSelectedTags(LinearLayout tagsLinearLayout) {
+	private List<Tag> getSelectedTags(GridLayout tagsLinearLayout) {
 		List<Tag> selectedTags = new ArrayList<Tag>();
-		tagsLinearLayout = (LinearLayout) findViewById(R.id.tagsLinearLayout);
+		tagsLinearLayout = (GridLayout) findViewById(R.id.tagsLinearLayout);
 		for (int i = 0; i < tagsLinearLayout.getChildCount(); i++) {
 			View v = tagsLinearLayout.getChildAt(i);
 			if (((ToggleButton) v).isChecked()) {
@@ -108,7 +132,7 @@ public class AddEntryActivity extends Activity {
 				c.getTime());
 		dateButton.setText(today);
 		dateButton.setOnClickListener(new View.OnClickListener() {
-			@Override
+		
 			public void onClick(View v) {
 				showDialog(DATE_DIALOG_ID);
 			}
@@ -116,7 +140,7 @@ public class AddEntryActivity extends Activity {
 	}
 
 	private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
-		@Override
+		
 		public void onDateSet(DatePicker view, int year, int monthOfYear,
 				int dayOfMonth) {
 			mYear = year;
@@ -166,7 +190,7 @@ public class AddEntryActivity extends Activity {
 		Button date = (Button) findViewById(R.id.addDate);
 		EditText description = (EditText) findViewById(R.id.desciptionEditText);
 		ToggleButton toggleButton = (ToggleButton) findViewById(R.id.toggleCredit);
-		LinearLayout tagsLinearLayout = (LinearLayout) findViewById(R.id.tagsLinearLayout);
+		GridLayout tagsLinearLayout = (GridLayout) findViewById(R.id.tagsLinearLayout);
 		boolean error = false;
 
 		Date dateAdded = null;
@@ -184,9 +208,13 @@ public class AddEntryActivity extends Activity {
 		entry.setFlag(toggleButton.getText().toString());
 		entry.setTags(getSelectedTags(tagsLinearLayout));
 
-		switch (item.getItemId()) {
+		switch (item.getItemId()) {	
+			
 		case android.R.id.home:
-			gotoHome();
+			// app icon in action bar clicked; go home
+			Intent intent = new Intent(this, CashBookActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
 			return true;
 		case R.id.actionbar_addmenu_save:
 			if (amount.getText().toString().length() == 0) {
